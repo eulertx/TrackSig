@@ -2,17 +2,20 @@
 
 # AUTHOR: Yulia Rubanova
 
+originaldir=/gpfs/bin/TrackSig
+
 vcf_file=$1 # Path to directory with vcf files
 phi_file=$2 # Path to directory with phi.txt files produces by cals_ssm_phis.py
+mkdir -p data/counts data/mut_order data/mut_types data/bootstrap
 
 mutation_counts_path="data/counts/" # Path where to write the mutation counts
 mut_order_path="data/mut_order/" # Path where to write mutation ordering (list of mutations sorted by phi). Needed to run get_clusters_at_timepoints.R. get_clusters_at_timepoints.R   composes list of tree node assignments for chunks of 100 mutations (prevalent tree node assignments at this time point)
 mutation_types_path="data/mut_types/" # Path where to write files listing mutation type (out of 96 trinucleotide-based types) for each mutation in vcf file sorted by phi
 mutation_bootstrap_path="data/bootstrap/" # Path where to write bootstrapped mutation counts
 
-make_hundreds_script="src/make_hundreds.py"
-get_mutation_type_script="src/getMutationTypes.pl"
-bootstrap_mutations_script="src/bootstrap_mutations.py"
+make_hundreds_script="$originaldir/src/make_hundreds.py"
+get_mutation_type_script="$originaldir/src/getMutationTypes.pl"
+bootstrap_mutations_script="$originaldir/src/bootstrap_mutations.py"
 
 do_bootstrap=true
 
@@ -101,6 +104,8 @@ num_mutations=$(min_number `cat $phi_file | wc -l` `cat $vcf_file | wc -l`)
 
 num_hundreds=$(($num_mutations/100 + ($num_mutations % 100 > 0))) 
 
+echo "working on $num_mutations with $num_hundreds batch"
+
 if [ ! -f $mutation_counts_file ]; then
 	if [ $num_mutations -lt 100 ]; then
 		echo "Less than 100 mutaions in a file $vcf_file or $phi_file" 
@@ -109,11 +114,13 @@ if [ ! -f $mutation_counts_file ]; then
 		echo "Count file..."
 			for i in `seq 1 $num_hundreds`; do
 			if [ $num_mutations -ge $((i*100-1)) ]; then 
-					###echo $i $((i*100-1))
-				python $make_hundreds_script $mutation_types_file  $((i*100-100)) $((i*100-1)) >> $mutation_counts_file #2>>$log_dir/log.txt
+			        echo $i $((i*100-1))
+				/home/changluyuan/.pyenv/versions/anaconda2-4.4.0/bin/python $make_hundreds_script $mutation_types_file  $((i*100-100)) $((i*100-1)) >> $mutation_counts_file #2>>$log_dir/log.txt
+#                                /home/changluyuan/.pyenv/versions/anaconda2-4.4.0/bin/python $make_hundreds_script $mutation_types_file  $((i*100-100)) $((i*100)) >> $mutation_counts_file #2>>$log_dir/log.txt
 				rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 				fi
 		done
+	echo "count done"
 	fi 
 fi
 
@@ -124,7 +131,8 @@ fi
 
 
 if [ "$do_bootstrap" = true ] ; then
-   bootstrap_dir=$mutation_bootstrap_path/$tumor_id/
+   echo "Bootstrap starting"
+	bootstrap_dir=$mutation_bootstrap_path/$tumor_id/
    if [ !  -z  $tumor_part  ]; then
 	bootstrap_dir=${bootstrap_dir:0:${#bootstrap_dir}-1}
 	bootstrap_dir=$bootstrap_dir.${tumor_part:0:${#tumor_part}-1}/
@@ -146,8 +154,8 @@ if [ "$do_bootstrap" = true ] ; then
 		if [ $num_mutations -lt 100 ]; then
 					touch $mutation_bootstrap_file
 			else
-			    # echo "Bootstrap mutations..."
-				python $bootstrap_mutations_script $mutation_types_file  $num_mutations  > $mutation_bootstrap_file_unsorted #2>>$log_dir/log.txt
+			        echo "Bootstrap mutations..."
+				/home/changluyuan/.pyenv/versions/anaconda2-4.4.0/bin/python $bootstrap_mutations_script $mutation_types_file  $num_mutations  > $mutation_bootstrap_file_unsorted #2>>$log_dir/log.txt
 				rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 		
 				sort -k3 -nr $mutation_bootstrap_file_unsorted > $mutation_bootstrap_file
@@ -155,10 +163,11 @@ if [ "$do_bootstrap" = true ] ; then
 	fi
 
 	 if [ ! -f $mutation_bootstrap_counts_file ] || [ ! -s  $mutation_bootstrap_counts_file ]; then
-			# echo "Bootstrap counts..."
+		        echo "Bootstrap counts..."
 			for t in `seq 1 $num_hundreds`; do
 				if [ $num_mutations -ge $((t*100-1)) ]; then
-					python $make_hundreds_script $mutation_bootstrap_file  $((t*100-100)) $((t*100-1)) >> $mutation_bootstrap_counts_file #2>>$log_dir/log.txt
+					/home/changluyuan/.pyenv/versions/anaconda2-4.4.0/bin/python $make_hundreds_script $mutation_bootstrap_file  $((t*100-100)) $((t*100-1)) >> $mutation_bootstrap_counts_file #2>>$log_dir/log.txt
+#					/home/changluyuan/.pyenv/versions/anaconda2-4.4.0/bin/python $make_hundreds_script $mutation_bootstrap_file  $((t*100-100)) $((t*100)) >> $mutation_bootstrap_counts_file #2>>$log_dir/log.txt
 					rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 				fi
 			done

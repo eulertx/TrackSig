@@ -9,11 +9,11 @@ library(NMF)
 nmf.options(grid.patch=TRUE)
 
 # Select fitting all signatures or only signatures for the particular cancer type
-sig_amount <- "onlyKnownSignatures" # recommended
-#sig_amount <- "allSignatures" # not recommended, time-consuming
+#sig_amount <- "onlyKnownSignatures" # recommended
+sig_amount <- "allSignatures" # not recommended, time-consuming
 
 # if the signatures are specified per cancer type or per sample
-cancer_type_signatures = TRUE
+cancer_type_signatures = FALSE
 
 # if signatures trajectories need to be computed on bootstrapped signatures as well
 # bootstrapping provides the uncertainty estimations on the trajectories
@@ -52,6 +52,8 @@ active_signatures_file = "/gpfs/bin/TrackSig/annotation/active_signatures_transp
 
 # specifies active signatures in each sample. Contains the active signatures for the example
 # active_signatures_file = "/gpfs/bin/TrackSig/annotation/active_in_samples.txt"
+
+# active_signatures_file = "data/activeSignature.txt"
 
 SAVED_SAMPLES_DIR = "saved_data/"
 

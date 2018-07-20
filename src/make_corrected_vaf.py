@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/home/changluyuan/.pyenv/versions/anaconda2-4.4.0/bin/python
 # coding=utf-8
 
 # AUTHOR: Jeff Wintersinger, Roujia Li, Yulia Rubanova
@@ -15,7 +15,7 @@ import random
 from collections import defaultdict
 import numpy as np
 from scipy.stats import beta
-cutoff = 10000
+cutoff = 1000000000
 min_readdepth=0
 
 half_with_highest_depth = False
@@ -234,13 +234,13 @@ def get_correct_vaf(cnv_regions, vcf_file, purity, ouput_file):
 	vcf_parser = PcawgConsensusParser(vcf_file)
         variants = vcf_parser._parse_vcf(vcf_file)
 
-	# print("Variants before filtering by depth (" + str(min_readdepth)+ "): " + str(len(variants)))
+	print("Variants before filtering by depth (" + str(min_readdepth)+ "): " + str(len(variants)))
 	variants = filter_vcf(vcf_parser, variants)
 
-	# print("Variants after filtering by depth (" + str(min_readdepth)+ "): " + str(len(variants)))
+	print("Variants after filtering by depth (" + str(min_readdepth)+ "): " + str(len(variants)))
 	if (len(variants) > cutoff):
 		variants = random.sample(variants, cutoff)
-	# print("Variants after cutoff (" + str(cutoff)+ "): " + str(len(variants)))
+	print("Variants after cutoff (" + str(cutoff)+ "): " + str(len(variants)))
 
 	vafs = []
 	vafs_new = []

@@ -1,5 +1,7 @@
 # AUTHOR: Yulia Rubanova
 
+source("/gpfs/bin/TrackSig/src/mixture_of_multinomials.R")
+
 # main function: get change points from vector of time points using change points lasso
 get_changepoints_vector <- function(data, lambda_type="lambda.1se")
 {

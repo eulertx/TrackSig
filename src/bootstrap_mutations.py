@@ -1,6 +1,6 @@
 # AUTHOR: Yulia Rubanova
 
-#!/usr/bin/python
+#!/home/changluyuan/.pyenv/versions/anaconda2-4.4.0/bin/python
 
 from __future__ import print_function
 import sys, random, os

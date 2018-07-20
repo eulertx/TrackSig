@@ -1,7 +1,7 @@
 # AUTHOR: Yulia Rubanova
 
 source("/gpfs/bin/TrackSig/src/helper_functions.R")
-source("/gpfs/bin/TrackSig/src/header.R")
+source("/gpfs/bin/TrackSig/src/header.fromMotif.R")
 source("/gpfs/bin/TrackSig/src/plotting.R")
 source("/gpfs/bin/TrackSig/src/compute_overall_exposures.R")
 

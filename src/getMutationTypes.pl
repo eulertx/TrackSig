@@ -13,7 +13,10 @@ sub mean {
 }
 sub min ($$) { $_[$_[0] > $_[1]] }
 
-my %fastaHandles = ("path" => "annotation/hg19/"); # human reference genome hg19
+my $originaldir="/gpfs/bin/TrackSig/";
+
+my %fastaHandles = ("path" => "$originaldir/annotation/hg19/"); # human reference genome hg19
+
 
 ###############################################################
 my $caller = $ARGV[0]; # caller definition: muse/caveman/dkfz..
@@ -25,7 +28,7 @@ my $MutOrderFile = $ARGV[3];
 # Assigning 96 trinucleotide context into a hash
 my $line;
 my %counts;
-my $countsFile = "annotation/trinucleotide.txt";
+my $countsFile = "$originaldir/annotation/trinucleotide.txt";
 open (COUNTSFILE, $countsFile) or die "Couldn't open $countsFile\n";
 while ($line = <COUNTSFILE>) # initializing 96 trinucleotide counts to 0
 {
