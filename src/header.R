@@ -47,8 +47,10 @@ signature_file = "/gpfs/bin/TrackSig/annotation/alexSignatures.txt"
 # file with trinucleotide context
 trinucleotide_file = "/gpfs/bin/TrackSig/annotation/trinucleotide.txt"
 
+# 20180724 wing
 # specifies active signatures in TCGA cancer types
-active_signatures_file = "/gpfs/bin/TrackSig/annotation/active_signatures_transposed.txt"
+# active_signatures_file = "/gpfs/bin/TrackSig/annotation/active_signatures_transposed.txt"
+active_signatures_file = 'newsignature.mod.txt'
 
 # specifies active signatures in each sample. Contains the active signatures for the example
 # active_signatures_file = "/gpfs/bin/TrackSig/annotation/active_in_samples.txt"
